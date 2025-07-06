@@ -6,10 +6,10 @@ function Timer() {
   const [focusInput, setFocusInput] = useState(25);
   const [breakInput, setBreakInput] = useState(5);
 
-  const [presets, setPresets] = useState([
-  { id: 1, name: "Deep Work", focus: 50, break: 10 },
-  { id: 2, name: "Chill Focus", focus: 25, break: 15 }
-]);
+  const [presets, setPresets] = useState(() => {
+  const stored = localStorage.getItem("flocus_presets");
+  return stored ? JSON.parse(stored) : [];
+});
 
 const [showPresets, setShowPresets] = useState(false);
 
@@ -25,6 +25,14 @@ const [showPresets, setShowPresets] = useState(false);
   const [snoozedTime, setSnoozedTime] = useState(0);
 
   const intervalRef = useRef(null);
+
+
+useEffect(() => {
+  console.log("saving presets to localStorage", presets);
+  localStorage.setItem("flocus_presets", JSON.stringify(presets));
+}, [presets]);
+
+
 
   // 🧠 Core timer logic
   useEffect(() => {
